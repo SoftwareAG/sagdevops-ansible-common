@@ -1,0 +1,61 @@
+ARG BASE_IMAGE
+
+FROM $BASE_IMAGE
+
+LABEL org.opencontainers.image.authors="fabien.sanglier@softwareaggov.com" \
+      org.opencontainers.image.vendor="Softwareag Government Solutions"
+
+ARG ANSIBLE_RELEASE
+
+## common vars
+ENV ANSIBLE_PATH="/ansible"
+ENV ANSIBLE_PLAYBOOKS_BASEPATH="${ANSIBLE_PATH}/playbooks"
+ENV ANSIBLE_ROLES_BASEPATH="${ANSIBLE_PATH}/roles"
+ENV ANSIBLE_VENV="${ANSIBLE_PATH}/venv"
+ENV ANSIBLE_VERBOSITY="0"
+
+## ansible-specific config env vars
+### Privilege escalation method to use when become is enabled.
+ENV ANSIBLE_BECOME_METHOD="su"
+
+### Set this to “False” if you want to avoid host key checking by the underlying tools Ansible uses to connect to the host
+ENV ANSIBLE_HOST_KEY_CHECKING="False"
+
+### Disable deprecation warnings
+ENV ANSIBLE_DEPRECATION_WARNINGS="False"
+
+### Set the main callback used to display Ansible output,
+# ENV ANSIBLE_STDOUT_CALLBACK="debug"
+# ENV ANSIBLE_STDOUT_CALLBACK="yaml"
+
+### Colon separated paths in which Ansible will search for Roles.
+ENV ANSIBLE_ROLES_PATH="${ANSIBLE_ROLES_PATH}:${ANSIBLE_ROLES_BASEPATH}/common"
+
+# Install Ansible
+RUN set -x \
+    && microdnf -y install python39 \
+    && python3 --version \
+    && python3 -m venv ${ANSIBLE_VENV} \
+    && source ${ANSIBLE_VENV}/bin/activate \
+    && pip3 install --upgrade setuptools pip \
+    && python3 -m pip --version \
+    && pip3 install https://github.com/ansible/ansible/archive/refs/tags/${ANSIBLE_RELEASE}.tar.gz \
+    && ansible --version
+
+# set path to virtual env
+ENV PATH=${ANSIBLE_VENV}/bin:$PATH
+
+## setup ansible
+RUN set -x \
+    && echo "==> Adding hosts for convenience..."  \
+    && mkdir -p /etc/ansible \
+    && echo "[local]" > /etc/ansible/hosts \
+    && echo "localhost ansible_connection=local" >> /etc/ansible/hosts \
+    && echo "==> Creating few needed ansible working directories"  \
+    && mkdir -p ${ANSIBLE_PLAYBOOKS_BASEPATH} ${ANSIBLE_ROLES_BASEPATH} ${ANSIBLE_ROLES_BASEPATH}/common \
+    && echo "==> Finally, Testing that ansible is working..." \
+    && ansible localhost -m ping
+
+WORKDIR ${ANSIBLE_PLAYBOOKS_BASEPATH}
+
+ENTRYPOINT ["ansible-playbook"]
