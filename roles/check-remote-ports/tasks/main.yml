@@ -1,11 +1,35 @@
 ---
 
-  - import_role: 
-      name: get-inventory-hosts
-    vars:
-      inventory_hosts_clear_first: true
+- debug: var=rvar_validation_host verbosity=1
+- debug: var=rvar_validation_ports verbosity=1
+- debug: var=rvar_validation_ports_timeout verbosity=1
+- debug: var=rvar_validation_ports_delay verbosity=1
 
-  - include_tasks: checkport.yml
-    loop: "{{ get_inventory_hosts }}"
-    loop_control:
-      loop_var: outer_item
+- name: fail if mandatory params not specified
+  fail:
+    msg: "A mandatory param was not defined, cannot do anything."
+  when: item is not defined
+  with_items:
+    - "{{ rvar_validation_host }}"
+    - "{{ rvar_validation_ports }}"
+
+- name: Wait for validation ports to become open on the host
+  wait_for:
+    host: "{{ rvar_validation_host }}"
+    port: "{{ item }}"
+    delay: "{{ rvar_validation_ports_delay }}"
+    timeout: "{{ rvar_validation_ports_timeout }}"
+  async: "{{ common_async_timeout }}"
+  poll: "{{ common_async_poll }}"
+  register: cmd_sleeper
+  with_items: "{{ rvar_validation_ports }}"
+  when: rvar_validation_ports is defined and (rvar_validation_ports|length > 0)
+
+- name: Check status for the port validation task
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: "{{ common_async_retries }}"
+  delay: "{{ common_async_delay }}"
+  with_items: "{{ cmd_sleeper.results }}"
