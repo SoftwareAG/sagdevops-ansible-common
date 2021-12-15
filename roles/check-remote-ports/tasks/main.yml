@@ -19,8 +19,8 @@
     port: "{{ item }}"
     delay: "{{ rvar_validation_ports_delay }}"
     timeout: "{{ rvar_validation_ports_timeout }}"
-  async: "{{ common_async_timeout }}"
-  poll: "{{ common_async_poll }}"
+  async: "{{ rvar_async_timeout }}"
+  poll: "{{ rvar_async_poll }}"
   register: cmd_sleeper
   with_items: "{{ rvar_validation_ports }}"
   when: rvar_validation_ports is defined and (rvar_validation_ports|length > 0)
@@ -30,6 +30,6 @@
     jid: "{{ item.ansible_job_id }}"
   register: job_result
   until: job_result.finished
-  retries: "{{ common_async_retries }}"
-  delay: "{{ common_async_delay }}"
+  retries: "{{ rvar_async_retries }}"
+  delay: "{{ rvar_async_delay }}"
   with_items: "{{ cmd_sleeper.results }}"

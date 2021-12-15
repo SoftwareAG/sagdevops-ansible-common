@@ -1,4 +1,11 @@
 ---
 
+## port checking
 rvar_validation_ports_timeout: 300
 rvar_validation_ports_delay: 0
+
+## async processing
+rvar_async_timeout: 2400
+rvar_async_poll: 0
+rvar_async_retries: 240
+rvar_async_delay: 10
