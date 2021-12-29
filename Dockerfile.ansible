@@ -40,6 +40,12 @@ RUN set -x \
     && pip3 install https://github.com/ansible/ansible/archive/refs/tags/${ANSIBLE_RELEASE}.tar.gz \
     && ansible --version
 
+# Install extras
+RUN set -x \
+    && microdnf -y install --nodocs tar gzip \
+    && microdnf clean all \
+    && true
+
 # set path to virtual env
 ENV PATH=${ANSIBLE_VENV}/bin:$PATH
 
