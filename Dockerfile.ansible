@@ -1,6 +1,4 @@
-ARG BASE_IMAGE
-
-FROM $BASE_IMAGE
+FROM redhat/ubi8-minimal
 
 LABEL org.opencontainers.image.authors="fabien.sanglier@softwareaggov.com" \
       org.opencontainers.image.vendor="Softwareag Government Solutions"
@@ -13,6 +11,9 @@ ENV ANSIBLE_PLAYBOOKS_BASEPATH="${ANSIBLE_PATH}/playbooks"
 ENV ANSIBLE_ROLES_BASEPATH="${ANSIBLE_PATH}/roles"
 ENV ANSIBLE_VENV="${ANSIBLE_PATH}/venv"
 ENV ANSIBLE_VERBOSITY="0"
+
+### Colon separated paths in which Ansible will search for Roles.
+ENV ANSIBLE_ROLES_PATH="~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles:${ANSIBLE_ROLES_BASEPATH}"
 
 ## ansible-specific config env vars
 ### Privilege escalation method to use when become is enabled.
@@ -27,9 +28,6 @@ ENV ANSIBLE_DEPRECATION_WARNINGS="False"
 ### Set the main callback used to display Ansible output,
 # ENV ANSIBLE_STDOUT_CALLBACK="debug"
 # ENV ANSIBLE_STDOUT_CALLBACK="yaml"
-
-### Colon separated paths in which Ansible will search for Roles.
-ENV ANSIBLE_ROLES_PATH="${ANSIBLE_ROLES_PATH}:${ANSIBLE_ROLES_BASEPATH}/common"
 
 # Install Ansible
 RUN set -x \

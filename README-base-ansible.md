@@ -1,43 +1,41 @@
-# sagdevops-ansible-common-utils
-A group of ansible common utils leveraged by the other product-specific ansible roles
+# sagdevops-ansible-runner
 
-## Using Containers
+A base ansible runner to execute ansible playbooks in containers (useful for testing, or for "configurator" types of playbooks)
 
-### Pre-requisite - Base Ansible runner
+Note: We will be building the ansible-runner on top of latest image "redhat/ubi8-minimal".
 
-If you haven't done dso already, make sure to have the "sagdevops-ansible-runner" built and ready.
-See instructions [README-base-ansible.md](./README-base-ansible.md) for details.
-### Building the container
+## Building the containers
 
-First set some environment variables to specify the build arguments:
+First set some environment variables to specify the ansible version to use:
 
 ```
 export REG=
-export TAG=0.0.1
+export SAGDEVOPS_ANSIBLE_RELEASE=v2.11.6
 ```
 
-Then, build the common utils image:
+Then, build the base ansible image:
 
 ```
-docker build --rm -f Dockerfile -t ${REG}sagdevops-ansible-common-utils:latest -t ${REG}sagdevops-ansible-common-utils:${TAG} --build-arg BASE_ANSIBLE_IMAGE=${REG}sagdevops-ansible-runner  .
+docker build --rm -f Dockerfile.ansible -t ${REG}sagdevops-ansible-runner:latest -t ${REG}sagdevops-ansible-runner:${SAGDEVOPS_ANSIBLE_RELEASE} --build-arg BASE_IMAGE=${SAGDEVOPS_BASE_IMAGE} --build-arg ANSIBLE_RELEASE=${SAGDEVOPS_ANSIBLE_RELEASE}  .
 ```
 
-This will create 1 container image with 2 tags (1 tagged with the build version, 1 tagged as "latest"): 
- - ${REG}sagdevops-ansible-common-utils:latest
- - ${REG}sagdevops-ansible-common-utils:${TAG}
+This will create 1 container image with 2 tags (1 tagged with the ansible version, 1 tagged as "latest"): 
+ - ${REG}sagdevops-ansible-runner:latest
+ - ${REG}sagdevops-ansible-runner:${SAGDEVOPS_ANSIBLE_RELEASE}
 
-Test to make sure it's there:
+Test to make sure it's there with the same image id:
 
 ```
-docker images ${REG}sagdevops-ansible-common-utils:${TAG}
-docker images ${REG}sagdevops-ansible-common-utils:latest
+docker images ${REG}sagdevops-ansible-runner:${SAGDEVOPS_ANSIBLE_RELEASE}
+docker images ${REG}sagdevops-ansible-runner:latest
 ```
-### Testing validity of the containers
+
+### Testing the runner
 
 We'll be running the simplest [ping.yml](./playbooks/ping.yml) playbook added to this project for testing:
 
 ```
-docker run -v $PWD/playbooks:/ansible/playbooks ${REG}sagdevops-ansible-common-utils:${TAG} -v ping.yml
+docker run -v $PWD/playbooks:/ansible/playbooks ${REG}sagdevops-ansible-runner:${SAGDEVOPS_ANSIBLE_RELEASE} -v ping.yml
 ```
 
 You should see the following output if all is well (notice the Task "ping" which should execute succesfully)
@@ -55,7 +53,7 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
 
-At this point, the image should be ready to be used.
+At this point, the ansible runner should be ready to be used by other playbooks/roles.
 
 # Authors
 Fabien Sanglier
