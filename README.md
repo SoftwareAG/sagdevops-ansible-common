@@ -1,4 +1,4 @@
-# sagdevops-ansible-common-utils
+# sagdevops-ansible-common
 A group of ansible common utils leveraged by the other product-specific ansible roles
 
 ## Using Containers
@@ -19,25 +19,25 @@ export TAG=0.0.1
 Then, build the common utils image:
 
 ```
-docker build --rm -f Dockerfile -t ${REG}sagdevops-ansible-common-utils:latest -t ${REG}sagdevops-ansible-common-utils:${TAG} --build-arg BASE_ANSIBLE_IMAGE=${REG}sagdevops-ansible-runner  .
+docker build --rm -f Dockerfile -t ${REG}sagdevops-ansible-common:latest -t ${REG}sagdevops-ansible-common:${TAG} --build-arg BASE_ANSIBLE_IMAGE=${REG}sagdevops-ansible-runner  .
 ```
 
 This will create 1 container image with 2 tags (1 tagged with the build version, 1 tagged as "latest"): 
- - ${REG}sagdevops-ansible-common-utils:latest
- - ${REG}sagdevops-ansible-common-utils:${TAG}
+ - ${REG}sagdevops-ansible-common:latest
+ - ${REG}sagdevops-ansible-common:${TAG}
 
 Test to make sure it's there:
 
 ```
-docker images ${REG}sagdevops-ansible-common-utils:${TAG}
-docker images ${REG}sagdevops-ansible-common-utils:latest
+docker images ${REG}sagdevops-ansible-common:${TAG}
+docker images ${REG}sagdevops-ansible-common:latest
 ```
 ### Testing validity of the containers
 
 We'll be running the simplest [ping.yml](./playbooks/ping.yml) playbook added to this project for testing:
 
 ```
-docker run -v $PWD/playbooks:/ansible/playbooks ${REG}sagdevops-ansible-common-utils:${TAG} -v ping.yml
+docker run -v $PWD/playbooks:/ansible/playbooks ${REG}sagdevops-ansible-common:${TAG} -v ping.yml
 ```
 
 You should see the following output if all is well (notice the Task "ping" which should execute succesfully)
