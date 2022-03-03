@@ -11,7 +11,7 @@
       - "{{ rvar_filecopy_syncpush_descriptor_single.dest_path }}"
       - "{{ rvar_filecopy_syncpush_descriptor_single.dest_inventory }}"
 
-  - name: Copy the file from mwiapp01 to mwiapp02 using Method Push
+  - name: Copy the file using Method Push
     tags: sync-push
     synchronize:
       src: "{{ rvar_filecopy_syncpush_descriptor_single.src_path }}"
