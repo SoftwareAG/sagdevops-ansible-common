@@ -1,0 +1,14 @@
+---
+
+rvar_rsync_opts: []
+rvar_rsync_timeout_sec: 20
+
+rvar_filecopy_mode: syncpush
+
+rvar_filecopy_syncpush_descriptor_list:
+  - src_path: "path/on/executing/host"
+    dest_path: "path/on/remote/hosts"
+    dest_inventory: "remote_hosts_inventory"
+  - src_path: "path/on/executing/host"
+    dest_path: "path/on/remote/hosts"
+    dest_inventory: "remote_hosts_inventory"

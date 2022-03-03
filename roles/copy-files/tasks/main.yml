@@ -1,0 +1,16 @@
+---
+
+- debug: var=rvar_filecopy_mode verbosity=3
+
+- name: Install the files only if the list is not empty
+  block:
+
+    - debug: var=rvar_filecopy_descriptor_list verbosity=3
+
+    - name: sync files (push) from executing host to remote hosts
+      include_tasks: "synccopy_push.yml"
+      with_items: "{{ rvar_filecopy_syncpush_descriptor_list }}"
+      loop_control:
+        loop_var: rvar_filecopy_syncpush_descriptor_single
+
+  when: rvar_filecopy_mode == "syncpush" and (rvar_filecopy_syncpush_descriptor_list|length > 0)
