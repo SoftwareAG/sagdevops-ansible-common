@@ -7,6 +7,34 @@ getfroms3_async: 2000
 getfroms3_poll: 0
 getfroms3_implementation: "cli"
 
+getfroms3_files_descriptor_list: []
+  # - bucket_name: "s3bucket"
+  #   bucket_prefix: "path/in/bucket"
+  #   bucket_path: "somepath/from/prefix"
+  #   local_path: "/some/local/path"
+  #   local_path_owner_user:
+  #   local_path_owner_group:
+  #   local_path_permission: "0600"
+  #   local_path_create_dir_ifnotexist: true
+  #   local_path_create_dir_owner_user: 
+  #   local_path_create_dir_owner_group: 
+  #   local_path_create_dir_permission: "0700"
+  #   force_download: "true"
+  #   throttle: "false"
+  # - bucket_name: "s3bucket"
+  #   bucket_prefix: "path/in/bucket"
+  #   bucket_path: "somepath/from/prefix"
+  #   local_path: "/some/local/path"
+  #   local_path_owner_user:
+  #   local_path_owner_group:
+  #   local_path_permission: "0600"
+  #   local_path_create_dir_ifnotexist: true
+  #   local_path_create_dir_owner_user: 
+  #   local_path_create_dir_owner_group: 
+  #   local_path_create_dir_permission: "0700"
+  #   force_download: "true"
+  #   throttle: "false"
+
 getfroms3_bucket_name:
 getfroms3_bucket_path:
 getfroms3_local_path:

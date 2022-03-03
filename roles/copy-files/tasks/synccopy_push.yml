@@ -1,0 +1,27 @@
+---
+
+  - debug: var=rvar_filecopy_syncpush_descriptor_single verbosity=1
+  
+  - name: fail if mandatory params not specified
+    fail: 
+      msg: "A mandatory param was not defined, cannot do anything."
+    when: item is not defined
+    with_items:
+      - "{{ rvar_filecopy_syncpush_descriptor_single.from_host }}"
+      - "{{ rvar_filecopy_syncpush_descriptor_single.from_path }}"
+      - "{{ rvar_filecopy_syncpush_descriptor_single.to_path }}"
+
+  - name: Copy the file using Method Push
+    tags: sync-push
+    synchronize:
+      src: "{{ rvar_filecopy_syncpush_descriptor_single.from_path }}"
+      dest: "{{ rvar_filecopy_syncpush_descriptor_single.to_path }}"
+      mode: push
+      checksum: true
+      compress: true
+      rsync_opts: "{{ rvar_rsync_opts }}"
+      rsync_timeout: "{{ rvar_rsync_timeout_sec }}"
+    delegate_to: "{{ rvar_filecopy_syncpush_descriptor_single.from_host }}"
+    register: filecopy_syncpush_descriptor_single_op_result
+
+  - debug: var=filecopy_syncpush_descriptor_single_op_result verbosity=1
