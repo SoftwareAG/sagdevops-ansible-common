@@ -3,12 +3,16 @@
 rvar_rsync_opts: []
 rvar_rsync_timeout_sec: 20
 
-rvar_filecopy_mode: syncpush
+rvar_filecopy_mode: "{{ _filecopy_mode_remote2host }}"
 
-rvar_filecopy_syncpush_descriptor_list:
-  - repo_inventory_host: "repo_inventory_host"
-    repo_path: "path/on/repo/host"
-    dest_path: "target/path/on/current/hosts"
-  - repo_inventory_host: "repo_inventory_host"
-    repo_path: "path/on/repo/host"
-    dest_path: "target/path/on/current/hosts"
+## Mode: remote2host
+## in this mode, the role is actually executed on the "to" target machines, but the rsync operation is actually executed from the "from_host" value
+## what this mean is that the "from_host" server should have the ability to perform rsync over ssh to the target machines...
+_filecopy_mode_remote2host: remote2host
+rvar_filecopy_remote2host_descriptor_list:
+  - from_host: "from_host"
+    from_path: "path/on/repo/host"
+    to_path: "target/path/on/current/hosts"
+  - from_host: "from_host"
+    from_path: "path/on/repo/host"
+    to_path: "target/path/on/current/hosts"
