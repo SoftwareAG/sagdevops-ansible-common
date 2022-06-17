@@ -1,5 +1,9 @@
 # sagdevops-ansible-common
 A group of ansible common utils leveraged by the other product-specific ansible roles
+
+**Note:**
+For a sample Infrastructure-as-Code (IaC) project that leverages these roles, head on over to [webmethods-ansible-api-gateway](https://github.com/softwareag-government-solutions/webmethods-ansible-api-gateway), maintained by [SoftwareAG Government Solutions's](https://www.softwareaggov.com)
+
 # Authors
 
 Fabien Sanglier
