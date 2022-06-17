@@ -1,5 +1,12 @@
 # sagdevops-ansible-common
 A group of ansible common utils leveraged by the other product-specific ansible roles
+# Authors
+
+Fabien Sanglier
+- Emails: [@Software AG](mailto:fabien.sanglier@softwareag.com) // [@Software AG Government Solutions](mailto:fabien.sanglier@softwareaggov.com)
+- Github: 
+  - [Fabien Sanglier](https://github.com/lanimall)
+  - [Fabien Sanglier @ SoftwareAG Government Solutions](https://github.com/fabien-sanglier-saggs)
 
 ## Using Containers
 
@@ -56,13 +63,6 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
 ```
 
 At this point, the image should be ready to be used.
-
-# Authors
-Fabien Sanglier
-- Emails: [@Software AG](mailto:fabien.sanglier@softwareag.com) [@Software AG Government Solutions](mailto:fabien.sanglier@softwareaggov.com)
-- Github: 
-  - [Fabien Sanglier @ SoftwareAG Government Solutions](https://github.com/fabien-sanglier-saggs)
-  - [Fabien Sanglier](https://github.com/lanimall)
 
 ______________________
 These tools are provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
