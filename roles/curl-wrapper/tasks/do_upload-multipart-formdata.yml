@@ -20,18 +20,18 @@
 
   - name: append all header params
     set_fact:
-      command_to_exec: "{{ command_to_exec }} + [ '-H' ] + [ '\"' + '{{ item.key }}:{{ item.value }}' + '\"' ]"
+      command_to_exec: "{{ command_to_exec }} + [ '-H' ] + [ '{{ item.key }}:{{ item.value }}' ]"
     with_dict: "{{ curl_wrapper_headers_fields }}"
 
   - name: append auth param
     set_fact:
-      command_to_exec: "{{ command_to_exec }} + [ '-u' ] + [ '\"' + '{{ curl_wrapper_basicauth_user }}:{{ curl_wrapper_basicauth_password }}' + '\"' ]"
+      command_to_exec: "{{ command_to_exec }} + [ '-u' ] + [ '{{ curl_wrapper_basicauth_user }}:{{ curl_wrapper_basicauth_password }}' ]"
     no_log: "{{ not ( disable_no_log | default(false,true) ) }}"
     when: curl_wrapper_basicauth_user is defined and curl_wrapper_basicauth_password is defined
 
   - name: append all form-data params
     set_fact:
-      command_to_exec: "{{ command_to_exec }} + [ '-F' ] + [ '\"' + '{{ item.key }}={{ item.value }}' + '\"' ]"
+      command_to_exec: "{{ command_to_exec }} + [ '-F' ] + [ '{{ item.key }}={{ item.value }}' ]"
     with_dict: "{{ curl_wrapper_multipart_formdata_fields }}"
 
   - name: append target URI
