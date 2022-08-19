@@ -11,7 +11,7 @@
 
   - name: append command params
     set_fact:
-      command_to_exec: "{{ command_to_exec }} + [ '-v' ] + [ '-H' ] + [ 'Content-Type:multipart/form-data' ]"
+      command_to_exec: "{{ command_to_exec }} + [ '-f' ] + [ '-v' ] + [ '-H' ] + [ 'Content-Type:multipart/form-data' ]"
 
   - name: append ignore invalid ssl certs param
     set_fact:
