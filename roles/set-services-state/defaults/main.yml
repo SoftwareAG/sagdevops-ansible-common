@@ -1,0 +1,6 @@
+---
+
+__default_part_type: "ext4"
+__default_directory_mode: "0700"
+
+rvar_diskpreps_temp_disable_noexec: false

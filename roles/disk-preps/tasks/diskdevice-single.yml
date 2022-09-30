@@ -2,8 +2,8 @@
 
 - debug: var=rvar_diskpreps_devices_single verbosity=1
 
-- name: remove noexec opt for /tmp mount
-  block:
+- block:
+
     - name: fail if mandatory params not specified
       fail:
         msg: "A mandatory param was not defined, cannot do anything."

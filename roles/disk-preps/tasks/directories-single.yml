@@ -2,8 +2,7 @@
 
 - debug: var=rvar_diskpreps_directories_single verbosity=1
 
-- name: remove noexec opt for /tmp mount
-  block:
+- block:
 
     - name: fail if mandatory params not specified
       fail:

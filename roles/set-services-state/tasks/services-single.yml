@@ -1,0 +1,21 @@
+---
+
+- debug: var=rvar_services_single verbosity=1
+
+- block:
+
+    - name: fail if mandatory params not specified
+      fail:
+        msg: "A mandatory param was not defined, cannot do anything."
+      when: item is not defined
+      with_items:
+        - "{{ rvar_services_single.name }}"
+        - "{{ rvar_services_single.state }}"
+
+    - name: set service state
+      ansible.builtin.service:
+        name: "{{ rvar_services_single.name }}"
+        enabled: "{{ rvar_services_single.enabled | default(omit) }}"
+        state: "{{ rvar_services_single.state }}"
+
+  when: rvar_services_single is defined
