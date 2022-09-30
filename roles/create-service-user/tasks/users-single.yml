@@ -1,0 +1,72 @@
+---
+
+- debug: var=rvar_users_single verbosity=1
+
+- name: Logging user params values
+  debug:
+    verbosity: 1
+    msg:
+      - "rvar_users_single.userid = {{ rvar_users_single.userid | default('undefined',true) }}"
+      - "rvar_users_single.username = {{ rvar_users_single.username | default('undefined',true) }}"
+      - "rvar_users_single.user_description = {{ rvar_users_single.user_description | default('undefined',true) }}"
+      - "rvar_users_single.groupid = {{ rvar_users_single.groupid | default('undefined',true) }}"
+      - "rvar_users_single.groupname = {{ rvar_users_single.groupname | default('undefined',true) }}"
+      - "rvar_users_single.authorized_sshkey_path = {{ rvar_users_single.authorized_sshkey_path | default('undefined',true) }}"
+
+- name: Ensure base group
+  group:
+    gid: "{{ rvar_users_single.groupid | default(omit) }}"
+    name: "{{ rvar_users_single.groupname }}"
+    state: present
+
+- name: Ensure base user
+  user:
+    uid: "{{ rvar_users_single.userid | default(omit) }}"
+    name: "{{ rvar_users_single.username }}"
+    group: "{{ rvar_users_single.groupname }}"
+    comment: "{{ rvar_users_single.user_description | default(omit) }}"
+    state: present
+    shell: /bin/bash
+    home: "/home/{{ rvar_users_single.username }}"
+    createhome: yes
+    append: yes
+    generate_ssh_key: "{{ generate_ssh_key }}"
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+  register: created_user
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: "{{ rvar_users_single.username }}"
+    state: present
+    key: "{{ lookup('file', '{{ item }}') }}"
+  with_fileglob:
+    - "{{ rvar_users_single.authorized_sshkey_path | default('/nonexistant') }}"
+
+- name: Create AWS config for the user if aws_access_key specified
+  block:
+    - name: Create .aws directory
+      file:
+        path: "/home/{{ rvar_users_single.username }}/.aws"
+        state: directory
+        owner: "{{ rvar_users_single.username }}"
+        group: "{{ rvar_users_single.groupname }}"
+        mode: 0700
+
+    - name:  Write the default aws credentials
+      template:
+        src: aws_credentials.j2
+        dest: "/home/{{ rvar_users_single.username }}/.aws/credentials"
+        owner: "{{ rvar_users_single.username }}"
+        group: "{{ rvar_users_single.groupname }}"
+        mode: 0600
+
+    - name:  Write the default aws config
+      template:
+        src: aws_configs.j2
+        dest: "/home/{{ rvar_users_single.username }}/.aws/config"
+        owner: "{{ rvar_users_single.username }}"
+        group: "{{ rvar_users_single.groupname }}"
+        mode: 0600
+
+  when: rvar_users_single.aws_access_key is defined and rvar_users_single.aws_access_key != ""
