@@ -1,0 +1,34 @@
+---
+
+- debug: var=rvar_diskpreps_devices_single verbosity=1
+
+- name: fail if mandatory params not specified
+  fail:
+    msg: "A mandatory param was not defined, cannot do anything."
+  when: item is not defined
+  with_items:
+    - "{{ rvar_diskpreps_devices_single }}"
+    - "{{ rvar_diskpreps_devices_single.device }}"
+    - "{{ rvar_diskpreps_devices_single.part_number }}"
+    - "{{ rvar_diskpreps_devices_single.part_label }}"
+    - "{{ rvar_diskpreps_devices_single.mount_path }}"
+    
+- name: Create a new primary partition
+  parted:
+    device: "{{ rvar_diskpreps_devices_single.device }}"
+    number: "{{ rvar_diskpreps_devices_single.part_number }}"
+    state: present
+
+- name: Create filesystem on disk_device and check disk blocks
+  filesystem:
+    fstype: "{{ rvar_diskpreps_devices_single.part_type | default(__default_part_type, true) }}"
+    dev: "{{ rvar_diskpreps_devices_single.device }}{{ rvar_diskpreps_devices_single.part_number }}"
+    force: no
+    opts: "-L {{ rvar_diskpreps_devices_single.part_label }}"
+
+- name: Mount up device by label
+  mount:
+    path: "{{ rvar_diskpreps_devices_single.mount_path }}"
+    src: "LABEL={{ rvar_diskpreps_devices_single.part_label }}"
+    fstype: "{{ rvar_diskpreps_devices_single.part_type | default(__default_part_type, true) }}"
+    state: mounted

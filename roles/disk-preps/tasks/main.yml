@@ -1,0 +1,35 @@
+---
+
+  - name: remove noexec opt for /tmp mount
+    block:
+
+      - name: '/etc/fstab: remove noexec opt for /tmp mount'
+        lineinfile:
+          path: /etc/fstab
+          backup: yes
+          backrefs: yes
+          regexp: '^(\S+\s+\/tmp\s+\S+\s+)(\S+)(,noexec)(\s+.+)$'
+          line: '\1\2\4'
+        register: fstab
+      
+      - name: 'If /tmp changed, remount'
+        command: 'mount /tmp -o remount'
+        args:
+          warn: no
+        when: fstab.changed
+ 
+    when: rvar_diskpreps_temp_disable_noexec|default()|bool
+
+  - name: Add and format disks if defined
+    include_tasks: "diskdevice-single.yml"
+    with_items: "{{ rvar_diskpreps_devices }}"
+    loop_control:
+      loop_var: rvar_diskpreps_devices_single
+    when: rvar_diskpreps_devices is defined and rvar_diskpreps_devices|length > 0
+
+  - name: Create directories
+    include_tasks: "directories-single.yml"
+    with_items: "{{ rvar_diskpreps_directories }}"
+    loop_control:
+      loop_var: rvar_diskpreps_directories_single
+    when: rvar_diskpreps_directories is defined and rvar_diskpreps_directories|length > 0
