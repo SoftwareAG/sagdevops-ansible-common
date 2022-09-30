@@ -1,0 +1,7 @@
+---
+
+  - name: Set system service states
+    include_tasks: "services-single.yml"
+    with_items: "{{ rvar_services }}"
+    loop_control:
+      loop_var: rvar_services_single
