@@ -25,11 +25,9 @@
     with_items: "{{ rvar_diskpreps_devices }}"
     loop_control:
       loop_var: rvar_diskpreps_devices_single
-    when: rvar_diskpreps_devices is defined and rvar_diskpreps_devices|length > 0
 
   - name: Create directories
     include_tasks: "directories-single.yml"
     with_items: "{{ rvar_diskpreps_directories }}"
     loop_control:
       loop_var: rvar_diskpreps_directories_single
-    when: rvar_diskpreps_directories is defined and rvar_diskpreps_directories|length > 0
