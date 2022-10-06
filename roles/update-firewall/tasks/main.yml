@@ -5,7 +5,7 @@
       port: "{{ item }}"
       permanent: yes
       state: enabled
-    with_items: "{{ sys_open_ports }}"
+    with_items: "{{ rvar_firewall_open_ports }}"
     notify: restart firewalld
 
 ##TOTO: add the concept of zone and clearing a zone completely to clean the state...

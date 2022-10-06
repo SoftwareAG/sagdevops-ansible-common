@@ -1,9 +1,8 @@
 ---
 
-restart_services: []
-force_restart_services: false
+rvar_osconfigs_force_restart_services: false
+rvar_osconfigs_allow_reboot: true
+rvar_osconfigs_restart_services: []
 
-sysctl_config: {}
-limits_configs: {}
-
-allow_reboot: false
+rvar_osconfigs_sysctl: {}
+rvar_osconfigs_limits: {}
