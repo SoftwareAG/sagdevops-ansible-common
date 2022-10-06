@@ -14,7 +14,7 @@
 
     - name: mount nfs share
       mount:
-        fstype: nfs
+        fstype: "{{ rvar_diskpreps_nfs_mounts_single.type | default('nfs',true) }}"
         opts: "{{ rvar_diskpreps_nfs_mounts_single.opts | default(omit) }}"
         dump: "{{ rvar_diskpreps_nfs_mounts_single.dump | default(omit) }}"
         passno: "{{ rvar_diskpreps_nfs_mounts_single.passno | default(omit) }}"
