@@ -2,7 +2,7 @@
 
 - block:
 
-    - name: Change various sysctl-settings, look at the sysctl-vars file for documentation
+    - name: Change various sysctl-settings
       sysctl:
         name: '{{ item.key }}'
         value: '{{ item.value }}'
@@ -13,7 +13,7 @@
       with_dict: '{{ rvar_osconfigs_sysctl }}'
       register: updatessysctl
 
-  when: rvar_osconfigs_sysctl is defined
+  when: rvar_osconfigs_sysctl is defined and rvar_osconfigs_sysctl.keys() | length > 0
 
 - block:
 
