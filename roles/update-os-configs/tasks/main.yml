@@ -1,5 +1,8 @@
 ---
 
+- debug: var=rvar_osconfigs_sysctl verbosity=1
+- debug: var=rvar_osconfigs_limits verbosity=1
+
 - block:
 
     - name: Change various sysctl-settings
