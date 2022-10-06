@@ -9,6 +9,7 @@
     reload: yes
     ignoreerrors: yes
   with_dict: '{{ rvar_osconfigs_sysctl }}'
+  when: rvar_osconfigs_sysctl is defined
   register: updatessysctl
 
 - name: Add or modify fsize hard limits
@@ -19,14 +20,8 @@
     value: '{{ item.value }}'
     comment: '{{ item.comment }}'
   with_items: '{{ rvar_osconfigs_limits }}'
+  when: rvar_osconfigs_limits is defined
   register: updateslimits
-
-- name: restart dependent services
-  service:
-    name: "{{ item }}"
-    state: restarted
-  with_items: '{{ rvar_osconfigs_restart_services }}'
-  when: rvar_osconfigs_force_restart_services or updatessysctl.changed or updateslimits.changed
 
 - name: reboot if any of the settings were changed
   reboot:
