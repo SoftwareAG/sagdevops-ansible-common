@@ -1,4 +1,5 @@
 ---
+  - debug: var=rvar_firewall_open_ports verbosity=1
 
   - name: Add ports to firewalld on target
     firewalld:

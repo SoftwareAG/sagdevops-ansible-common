@@ -1,5 +1,7 @@
 ---
 
+- debug: var=rvar_packages verbosity=1
+
 - name: Install necessary packages (RHEL)
   package: 
     name: '{{ item }}'
