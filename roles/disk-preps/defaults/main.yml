@@ -11,7 +11,7 @@ __default_directory_mode: "0700"
 ## ^(\S+\s+\/tmp\s+\S+\s+)(\S+)(,noexec)(\s+.+)$
 ##
 ## this one works with any white space chars
-__default_noexec_regex_pattern: "^(.+\/[^\/]+\/tmp[^a-zA-Z]+)(ext[2-4]|xfs)([^a-zA-Z]+[,a-zA-Z]*)(,noexec)([,a-zA-Z]*)(.+)$"
+__default_noexec_regex_pattern: "^(.+\\/[^\\/]+\/tmp[^a-zA-Z]+)(ext[2-4]|xfs)([^a-zA-Z]+[,a-zA-Z]*)(,noexec)([,a-zA-Z]*)(.+)$"
 __default_noexec_line_output: "\\1\\2\\3\\5\\6"
 
 rvar_diskpreps_temp_disable_noexec: false
