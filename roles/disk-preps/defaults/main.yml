@@ -5,19 +5,29 @@ __default_directory_mode: "0700"
 
 rvar_diskpreps_temp_disable_noexec: false
 
-rvar_diskpreps_devices:
-  - device: "/dev/sdb"
-    part_number: 1
-    part_type: "ext4"
-    part_label: "LABEL"
-    mount_path: "/data"
+rvar_diskpreps_devices: []
+  # - device: "/dev/sdb"
+  #   part_number: 1
+  #   part_type: "ext4"
+  #   part_label: "LABEL"
+  #   mount_path: "/data"
 
-rvar_diskpreps_directories:
-  - path: "/path/to/folder"
-    owner_user: "user"
-    owner_group: "group"
-    mode: "0775"
-  - path: "/path/to/folder"
-    owner_user: "user"
-    owner_group: "group"
-    mode: "0775"
+rvar_diskpreps_directories: []
+  # - path: "/path/to/folder"
+  #   owner_user: "user"
+  #   owner_group: "group"
+  #   mode: "0775"
+  # - path: "/path/to/folder"
+  #   owner_user: "user"
+  #   owner_group: "group"
+  #   mode: "0775"
+
+rvar_diskpreps_nfs_mounts: []
+  # - path: /mnt/shared_data1
+  #   src: 192.168.1.100:/nfs/ssd/shared_data1
+  #   opts: rw,sync,hard
+  #   state: mounted
+  # - path: /mnt/shared_data2
+  #   src: 192.168.1.100:/nfs/ssd/shared_data2
+  #   opts: rw,sync,hard
+  #   state: mounted

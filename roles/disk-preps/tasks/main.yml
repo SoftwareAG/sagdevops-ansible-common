@@ -19,12 +19,18 @@
         when: fstab.changed
  
     when: rvar_diskpreps_temp_disable_noexec|default()|bool
-
+  
   - name: Add and format disks if defined
     include_tasks: "diskdevice-single.yml"
     with_items: "{{ rvar_diskpreps_devices }}"
     loop_control:
       loop_var: rvar_diskpreps_devices_single
+
+  - name: mount nfs shares
+    include_tasks: "mount-nfs-single.yml"
+    with_items: "{{ rvar_diskpreps_nfs_mounts }}"
+    loop_control:
+      loop_var: rvar_diskpreps_nfs_mounts_single
 
   - name: Create directories
     include_tasks: "directories-single.yml"
