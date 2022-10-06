@@ -10,7 +10,7 @@
         state: present
         reload: yes
         ignoreerrors: yes
-      with_dict: '{{ rvar_osconfigs_sysctl }}'
+      with_dict: "{{ rvar_osconfigs_sysctl | default({}) }}"
       register: updatessysctl
 
   when: rvar_osconfigs_sysctl is defined and rvar_osconfigs_sysctl.keys()|list|length > 0
