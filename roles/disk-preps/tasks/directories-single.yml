@@ -18,7 +18,7 @@
       file:
         path: "{{ rvar_diskpreps_directories_single.path }}"
         state: directory
-        recurse: no
+        recurse: yes
         owner: "{{ rvar_diskpreps_directories_single.owner_user | default(omit) }}"
         group: "{{ rvar_diskpreps_directories_single.owner_group | default(omit) }}"
         mode: "{{ rvar_diskpreps_directories_single.mode | default(__default_directory_mode,true) }}"
