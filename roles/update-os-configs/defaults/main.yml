@@ -1,5 +1,3 @@
 ---
 
 rvar_osconfigs_allow_reboot: true
-rvar_osconfigs_sysctl: {}
-rvar_osconfigs_limits: {}

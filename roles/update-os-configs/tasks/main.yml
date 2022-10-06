@@ -13,7 +13,7 @@
       with_dict: '{{ rvar_osconfigs_sysctl }}'
       register: updatessysctl
 
-  when: rvar_osconfigs_sysctl is defined and rvar_osconfigs_sysctl.keys() | length > 0
+  when: rvar_osconfigs_sysctl is defined and rvar_osconfigs_sysctl.keys()|list|length > 0
 
 - block:
 
