@@ -5,6 +5,12 @@
 - debug: var=rvar_diskpreps_nfs_mounts verbosity=1
 - debug: var=rvar_diskpreps_directories verbosity=1
 
+- name: Create directories
+  include_tasks: "directories-single.yml"
+  with_items: "{{ rvar_diskpreps_directories }}"
+  loop_control:
+    loop_var: rvar_diskpreps_directories_single
+
 - name: remove noexec opt for /tmp mount
   block:
     - debug: var=__default_noexec_regex_pattern verbosity=1
@@ -38,9 +44,3 @@
   with_items: "{{ rvar_diskpreps_nfs_mounts }}"
   loop_control:
     loop_var: rvar_diskpreps_nfs_mounts_single
-
-- name: Create directories
-  include_tasks: "directories-single.yml"
-  with_items: "{{ rvar_diskpreps_directories }}"
-  loop_control:
-    loop_var: rvar_diskpreps_directories_single
