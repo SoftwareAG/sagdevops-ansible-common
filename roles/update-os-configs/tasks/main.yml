@@ -2,35 +2,27 @@
 
 - debug: var=rvar_osconfigs_sysctl verbosity=1
 - debug: var=rvar_osconfigs_limits verbosity=1
+    
+- name: Change various sysctl-settings
+  sysctl:
+    name: '{{ item.key }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_dict: "{{ rvar_osconfigs_sysctl }}"
+  register: updatessysctl
 
-- block:
-
-    - name: Change various sysctl-settings
-      sysctl:
-        name: '{{ item.key }}'
-        value: '{{ item.value }}'
-        sysctl_set: yes
-        state: present
-        reload: yes
-        ignoreerrors: yes
-      with_dict: "{{ rvar_osconfigs_sysctl | default({}) }}"
-      register: updatessysctl
-
-  when: rvar_osconfigs_sysctl is defined and rvar_osconfigs_sysctl.keys()|list|length > 0
-
-- block:
-
-    - name: Add or modify fsize hard limits
-      pam_limits:
-        domain: '{{ item.domain }}'
-        limit_type: '{{ item.type }}'
-        limit_item: '{{ item.item }}'
-        value: '{{ item.value }}'
-        comment: '{{ item.comment }}'
-      with_items: '{{ rvar_osconfigs_limits }}'
-      register: updateslimits
-
-  when: rvar_osconfigs_limits is defined
+- name: Add or modify fsize hard limits
+  pam_limits:
+    domain: '{{ item.domain }}'
+    limit_type: '{{ item.type }}'
+    limit_item: '{{ item.item }}'
+    value: '{{ item.value }}'
+    comment: '{{ item.comment }}'
+  with_items: '{{ rvar_osconfigs_limits }}'
+  register: updateslimits
 
 - name: reboot if any of the settings were changed
   reboot:
