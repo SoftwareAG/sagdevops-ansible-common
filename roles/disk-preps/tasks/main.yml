@@ -2,14 +2,16 @@
 
   - name: remove noexec opt for /tmp mount
     block:
+      - debug: var=__default_noexec_regex_pattern verbosity=1
+      - debug: var=__default_noexec_line_output verbosity=1
 
       - name: '/etc/fstab: remove noexec opt for /tmp mount'
         lineinfile:
           path: /etc/fstab
           backup: yes
           backrefs: yes
-          regexp: '^(\S+\s+\/tmp\s+\S+\s+)(\S+)(,noexec)(\s+.+)$'
-          line: '\1\2\4'
+          regexp: "{{ __default_noexec_regex_pattern }}"
+          line: "{{ __default_noexec_line_output }}"
         register: fstab
       
       - name: 'If /tmp changed, remount'
