@@ -15,6 +15,7 @@
     - name: Creates a cron file under /etc/cron.d
       ansible.builtin.cron:
         name: "{{ rvar_cron_jobs_single.name }}"
+        state: "{{ rvar_cron_jobs_single.state | default('present') }}"
         weekday: "{{ rvar_cron_jobs_single.weekday | default('*') }}"
         minute: "{{ rvar_cron_jobs_single.minute | default('*') }}"
         hour: "{{ rvar_cron_jobs_single.hour | default('*') }}"
