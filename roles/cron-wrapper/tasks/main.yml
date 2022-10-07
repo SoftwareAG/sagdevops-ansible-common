@@ -1,0 +1,8 @@
+---
+
+- debug: var=rvar_cron_jobs verbosity=1
+
+- include_tasks: "crons-single.yml"
+  with_items: "{{ rvar_cron_jobs }}"
+  loop_control:
+    loop_var: rvar_cron_jobs_single

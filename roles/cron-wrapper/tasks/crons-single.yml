@@ -1,0 +1,26 @@
+---
+
+- debug: var=rvar_cron_jobs_single verbosity=1
+
+- block:
+
+    - name: fail if mandatory params not specified
+      fail:
+        msg: "A mandatory param was not defined, cannot do anything."
+      when: item is not defined
+      with_items:
+        - "{{ rvar_cron_jobs_single.name }}"
+        - "{{ rvar_cron_jobs_single.job }}"
+
+    - name: Creates a cron file under /etc/cron.d
+      ansible.builtin.cron:
+        name: "{{ rvar_cron_jobs_single.name }}"
+        weekday: "{{ rvar_cron_jobs_single.weekday | default('*') }}"
+        minute: "{{ rvar_cron_jobs_single.minute | default('*') }}"
+        hour: "{{ rvar_cron_jobs_single.hour | default('*') }}"
+        user: "{{ rvar_cron_jobs_single.user | default(omit) }}"
+        job: "{{ rvar_cron_jobs_single.job }}"
+        cron_file: "{{ rvar_cron_jobs_single.cron_file | default(omit) }}"
+      with_items: "{{ rvar_cron_jobs_single }}"
+
+  when: rvar_cron_jobs_single is defined and rvar_cron_jobs_single | length > 0
