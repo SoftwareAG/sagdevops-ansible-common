@@ -27,7 +27,7 @@
 
     - name: append credentials opts params
       set_fact:
-        _mount_opts: "{{ rvar_diskpreps_nfs_mounts_single.opts | default('') }},credentials={{ _mount_credentials_filepath }} | regex_replace('^,', '')"
+        _mount_opts: "{{ '%s,credentials=%s' | format( rvar_diskpreps_nfs_mounts_single.opts | default(''), _mount_credentials_filepath ) | regex_replace('^,', '') }}"
       when: rvar_diskpreps_nfs_mounts_single.credentials is defined
 
     - name: mount nfs share
