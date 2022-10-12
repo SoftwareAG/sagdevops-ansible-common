@@ -33,12 +33,18 @@ rvar_diskpreps_directories: []
   #   owner_group: "group"
   #   mode: "0775"
 
+## credentials should contain a dictionnary of key/values pair that
+__default_diskpreps_nfs_mounts_credentials_filepath: "{{ ansible_env.HOME }}/.nfscredentials"
 rvar_diskpreps_nfs_mounts: []
   # - path: /mnt/shared_data1
   #   src: 192.168.1.100:/nfs/ssd/shared_data1
   #   opts: rw,sync,hard
   #   state: mounted
+  #   credentials: {}
+  #   credentials_filepath: ""
   # - path: /mnt/shared_data2
   #   src: 192.168.1.100:/nfs/ssd/shared_data2
   #   opts: rw,sync,hard
   #   state: mounted
+  #   credentials: {}
+  #   credentials_filepath: ""

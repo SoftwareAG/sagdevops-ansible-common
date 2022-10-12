@@ -11,11 +11,29 @@
       with_items:
         - "{{ rvar_diskpreps_nfs_mounts_single.src }}"
         - "{{ rvar_diskpreps_nfs_mounts_single.path }}"
+  
+    - name: create credentials file path
+      set_fact:
+        _mount_credentials_filepath: "{{ rvar_diskpreps_nfs_mounts_single.credentials_filepath | default(__default_diskpreps_nfs_mounts_credentials_filepath, true) }}"
+      when: rvar_diskpreps_nfs_mounts_single.credentials is defined
+
+    - name: create credentials file
+      template:
+        src: credentials.j2
+        dest: "{{ _mount_credentials_filepath }}"
+      vars:
+        _credentials_dict: "{{ rvar_diskpreps_nfs_mounts_single.credentials }}"
+      when: rvar_diskpreps_nfs_mounts_single.credentials is defined
+
+    - name: append credentials opts params
+      set_fact:
+        _mount_opts: "{{ rvar_diskpreps_nfs_mounts_single.opts | default('') }},credentials={{ _mount_credentials_filepath }} | regex_replace('^,', '')"
+      when: rvar_diskpreps_nfs_mounts_single.credentials is defined
 
     - name: mount nfs share
       mount:
         fstype: "{{ rvar_diskpreps_nfs_mounts_single.type | default('nfs',true) }}"
-        opts: "{{ rvar_diskpreps_nfs_mounts_single.opts | default(omit) }}"
+        opts: "{{ _mount_opts }}"
         dump: "{{ rvar_diskpreps_nfs_mounts_single.dump | default(omit) }}"
         passno: "{{ rvar_diskpreps_nfs_mounts_single.passno | default(omit) }}"
         state: "{{ rvar_diskpreps_nfs_mounts_single.state | default('mounted',true) }}"
